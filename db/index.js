@@ -3,7 +3,6 @@ const pg = require("pg");
 // Data-Base Connection
 const connectionOptions = {
   dialect: process.env.DB_DIALECT,
-  dialectModule: pg,
   host: process.env.DB_HOST,
   database: process.env.DB_NAME,
   username: process.env.DB_USERNAME,
@@ -11,4 +10,14 @@ const connectionOptions = {
   logging: (message) => console.log(message),
 };
 const dbClient = new Sequelize(connectionOptions);
+
+// try {
+//   dbClient.sync({
+//     force: true,
+//     sync: true,
+//   });
+// } catch (error) {
+//   console.log("error: ", error);
+//   process.exit(1);
+// }
 module.exports = dbClient;

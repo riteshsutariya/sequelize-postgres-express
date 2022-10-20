@@ -17,7 +17,6 @@ const Book = dbClient.define(
     bk_description: { type: DataTypes.STRING, allowNull: false },
   },
   {
-    dbClient,
     modelName: "Book",
     tableName: "books",
   }

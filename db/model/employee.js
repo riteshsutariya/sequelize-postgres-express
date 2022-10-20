@@ -1,6 +1,6 @@
 const { DataTypes } = require("sequelize");
 const dbClient = require("../index");
-
+const Department = require("./departments");
 const Employee = dbClient.define(
   "Employee",
   {
@@ -25,6 +25,10 @@ const Employee = dbClient.define(
     em_dep_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: {
+        model: Department,
+        key: "dep_id",
+      },
     },
     em_gender: {
       type: DataTypes.STRING,
@@ -32,8 +36,7 @@ const Employee = dbClient.define(
     },
   },
   {
-    dbClient,
-    modelName: "Employee",
+    model: "Employee",
     tableName: "employees",
   }
 );

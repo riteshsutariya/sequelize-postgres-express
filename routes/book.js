@@ -1,12 +1,12 @@
 const express = require("express");
 const app = express.Router();
 // const books = require("../data/books");
-const book = require("../db/model/book");
+const { Book } = require("../db/model/index");
 const dbClient = require("../db/index");
 //get all books
 app.get("/", async (req, res) => {
   try {
-    let books = await book.findAll({ order: [["bk_id", "ASC"]] });
+    let books = await Book.findAll({ order: [["bk_id", "ASC"]] });
     console.log("books data: ", books.length);
     if (books.length > 0) {
       return res.status(200).json({
@@ -38,7 +38,7 @@ app.get("/", async (req, res) => {
 app.get("/:bk_id", async (req, res) => {
   let id = parseInt(req.params.bk_id);
   if (id) {
-    let result = await book.findOne({
+    let result = await Book.findOne({
       where: {
         bk_id: id,
       },
@@ -72,7 +72,7 @@ app.post("/", async (req, res) => {
   const newBook = req.body;
   const transaction = await dbClient.transaction();
   try {
-    const book = await book.create(newBook, { transaction });
+    const book = await Book.create(newBook, { transaction });
     await transaction.commit();
     return res.status(200).json({
       status: true,
@@ -98,7 +98,7 @@ app.put("/:bk_id", async (req, res) => {
   if (id) {
     updatedBookData?.bk_id ? delete updatedBookData.bk_id : null;
     const transaction = await dbClient.transaction();
-    const result = await book.update(updatedBookData, {
+    const result = await Book.update(updatedBookData, {
       where: {
         bk_id: id,
       },
@@ -136,7 +136,7 @@ app.delete("/:bk_id", async (req, res) => {
   if (id) {
     try {
       const transaction = await dbClient.transaction();
-      let deletedBook = await book.destroy({
+      let deletedBook = await Book.destroy({
         where: {
           bk_id: id,
         },

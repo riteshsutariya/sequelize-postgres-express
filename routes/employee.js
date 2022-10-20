@@ -1,12 +1,13 @@
 const express = require("express");
 const app = express.Router();
-const employee = require("../db/model/employee");
+const { Employee } = require("../db/model/index");
 const dbClient = require("../db/index");
+const { Department } = require("../db/model/index");
 
 //get all employees
 app.get("/", async (req, res) => {
   try {
-    let data = await employee.findAll();
+    let data = await Employee.findAll();
     console.log(data);
     if (data.length) {
       res.status(200).json({
@@ -37,9 +38,12 @@ app.get("/:em_id", async (req, res) => {
   let id = req.params.em_id;
   if (id) {
     try {
-      const result = await employee.findOne({
+      const result = await Employee.findOne({
         where: {
           em_id: id,
+        },
+        include: {
+          model: Department,
         },
       });
       if (result) {
@@ -76,7 +80,7 @@ app.post("/", async (req, res) => {
   if (newEmployee) {
     const transaction = await dbClient.transaction();
     try {
-      const result = await employee.create(newEmployee, { transaction });
+      const result = await Employee.create(newEmployee, { transaction });
       await transaction.commit();
       return res.status(200).json({
         status: true,
@@ -108,9 +112,9 @@ app.put("/:em_id", async (req, res) => {
   console.log("id: ", id, "\n updatedEmployee: ", updatedEmployee);
   if (id && updatedEmployee) {
     const transaction = await dbClient.transaction();
-    updatedEmployee?.em_id ? delete employee.em_id : null;
+    updatedEmployee?.em_id ? delete Employee.em_id : null;
     try {
-      const result = await employee.update(updatedEmployee, {
+      const result = await Employee.update(updatedEmployee, {
         where: {
           em_id: id,
         },
@@ -157,7 +161,7 @@ app.delete("/:em_id", async (req, res) => {
   console.log(typeof id, id);
   const transaction = await dbClient.transaction();
   try {
-    const result = await employee.destroy({
+    const result = await Employee.destroy({
       where: { em_id: id },
       transaction,
     });

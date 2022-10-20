@@ -1,5 +1,5 @@
 const Sequelize = require("sequelize");
-
+const initModels = require("./model/init-models");
 // Data-Base Connection
 const connectionOptions = {
   dialect: process.env.DB_DIALECT,
@@ -19,6 +19,8 @@ const sequelize2 = new Sequelize({
   storage: "postgres://localhost:5432",
 });
 //3. passing parametere seprately(other dialects)
-const sequelize3 = new Sequelize(connectionOptions);
+const dbClient = new Sequelize(connectionOptions);
 
-module.exports = sequelize3;
+// initModels(dbClient);
+
+module.exports = dbClient;

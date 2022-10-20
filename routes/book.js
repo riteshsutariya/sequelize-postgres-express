@@ -114,9 +114,6 @@ app.put("/:bk_id", async (req, res) => {
         data: result,
       },
     });
-    /*if (result) {
-    } else {
-    }*/
   } else {
     res.status(304).json({
       status: false,

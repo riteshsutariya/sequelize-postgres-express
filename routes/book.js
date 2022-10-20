@@ -1,12 +1,12 @@
 const express = require("express");
 const app = express.Router();
 // const books = require("../data/books");
-const Book = require("../db/model/book");
+const book = require("../db/model/book");
 const dbClient = require("../db/index");
 //get all books
 app.get("/", async (req, res) => {
   try {
-    let books = await Book.findAll({ order: [["bk_id", "ASC"]] });
+    let books = await book.findAll({ order: [["bk_id", "ASC"]] });
     console.log("books data: ", books.length);
     if (books.length > 0) {
       return res.status(200).json({
@@ -36,10 +36,9 @@ app.get("/", async (req, res) => {
 
 //get book by id
 app.get("/:bk_id", async (req, res) => {
-  const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   let id = parseInt(req.params.bk_id);
   if (id) {
-    let result = await Book.findOne({
+    let result = await book.findOne({
       where: {
         bk_id: id,
       },
@@ -73,7 +72,7 @@ app.post("/", async (req, res) => {
   const newBook = req.body;
   const transaction = await dbClient.transaction();
   try {
-    const book = await Book.create(newBook, { transaction });
+    const book = await book.create(newBook, { transaction });
     await transaction.commit();
     return res.status(200).json({
       status: true,
@@ -99,7 +98,7 @@ app.put("/:bk_id", async (req, res) => {
   if (id) {
     updatedBookData?.bk_id ? delete updatedBookData.bk_id : null;
     const transaction = await dbClient.transaction();
-    const result = await Book.update(updatedBookData, {
+    const result = await book.update(updatedBookData, {
       where: {
         bk_id: id,
       },
@@ -107,13 +106,22 @@ app.put("/:bk_id", async (req, res) => {
       returning: true,
     });
     await transaction.commit();
-    return res.status(200).json({
-      status: true,
-      response: {
-        message: "book updated successfully.",
-        data: result,
-      },
-    });
+    if (result[1].length) {
+      return res.status(200).json({
+        status: true,
+        response: {
+          message: "book updated successfully.",
+          data: result[1],
+        },
+      });
+    } else {
+      return res.status(404).json({
+        status: false,
+        response: {
+          message: "no book found with provided id!",
+        },
+      });
+    }
   } else {
     res.status(304).json({
       status: false,
@@ -128,10 +136,11 @@ app.delete("/:bk_id", async (req, res) => {
   if (id) {
     try {
       const transaction = await dbClient.transaction();
-      let deletedBook = await Book.destroy({
+      let deletedBook = await book.destroy({
         where: {
           bk_id: id,
         },
+        transaction,
       });
       await transaction.commit();
       console.log("deleted book: ", deletedBook);

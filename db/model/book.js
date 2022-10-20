@@ -1,41 +1,5 @@
-const { Sequelize, DataTypes, Model } = require("sequelize");
+const { DataTypes } = require("sequelize");
 const dbClient = require("../index");
-/*
-const Book = database.define(
-  "Book",
-  {
-    bk_id: { type: DataTypes.INTEGER, allowNull: false },
-    bk_name: { type: DataTypes.STRING, allowNull: false },
-    bk_auther: { type: DataTypes.STRING, allowNull: false },
-    bk_price: { type: DataTypes.INTEGER, allowNull: false },
-    bk_publisher: { type: DataTypes.STRING, allowNull: false },
-    bk_descrition: { type: DataTypes.STRING, allowNull: false },
-  },
-  {
-    tableName: "Books",
-  }
-);*/
-
-// class Book extends Model {
-//   static initModel(sequelize) {
-//     Book.init(
-//       {
-//         bk_id: { type: DataTypes.INTEGER, allowNull: false },
-//         bk_name: { type: DataTypes.STRING, allowNull: false },
-//         bk_auther: { type: DataTypes.STRING, allowNull: false },
-//         bk_price: { type: DataTypes.INTEGER, allowNull: false },
-//         bk_publisher: { type: DataTypes.STRING, allowNull: false },
-//         bk_descrition: { type: DataTypes.STRING, allowNull: false },
-//       },
-//       {
-//         sequelize,
-//         tableName: "books",
-//         schema: "public",
-//         timestamps: false,
-//       }
-//     );
-//   }
-// }
 
 const Book = dbClient.define(
   "Book",

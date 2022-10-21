@@ -1,4 +1,5 @@
 const Sequelize = require("sequelize");
+const initModels = require("../models/init-models");
 const pg = require("pg");
 // Data-Base Connection
 const connectionOptions = {
@@ -11,13 +12,14 @@ const connectionOptions = {
 };
 const dbClient = new Sequelize(connectionOptions);
 
+const models = initModels(dbClient);
 // try {
 //   dbClient.sync({
-//     force: true,
+//     // force: true,
 //     sync: true,
 //   });
 // } catch (error) {
 //   console.log("error: ", error);
 //   process.exit(1);
 // }
-module.exports = dbClient;
+module.exports = { dbClient, models };

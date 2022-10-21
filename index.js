@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 const bookRoute = require("./routes/book");
 const employeeRoute = require("./routes/employee");
+const departmentRoute = require("./routes/deaprtment");
 const checkDB = require("./auth/connection");
 
 const app = express();
@@ -23,6 +24,7 @@ app.get("/", (req, res) => {
 
 app.use("/book", bookRoute);
 app.use("/employee", employeeRoute);
+app.use("/department", departmentRoute);
 
 app.listen(PORT, () => {
   console.log(`app listening http://localhost:${PORT}`);

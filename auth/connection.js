@@ -1,8 +1,8 @@
-const connection = require("../db/index");
+const { dbClient } = require("../db/index");
 
 const checkDBConnection = async () => {
   try {
-    await connection.authenticate();
+    await dbClient.authenticate();
     console.log(`database connection successfull.`);
   } catch (error) {
     console.error(`unable to connect to the database: ${error}`);
